@@ -205,13 +205,6 @@
                         </div>
                     </div>
                     
-                    <div class="flex items-center mb-4">
-                        <input type="checkbox" id="terms" class="mr-3 rounded border-white/30 bg-white/20">
-                        <label for="terms" class="text-white/80 text-sm">
-                            Acepto los <a href="#" class="text-white font-semibold hover:underline">términos y condiciones</a>
-                        </label>
-                    </div>
-                    
                     <div class="flex justify-between">
                         <button 
                             type="button" 
@@ -354,10 +347,12 @@
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
+                passwordInput.removeAttribute('required'); // Remover required temporalmente
                 eyeIcon.classList.remove('fa-eye');
                 eyeIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
+                passwordInput.setAttribute('required', 'required'); // Restaurar required
                 eyeIcon.classList.remove('fa-eye-slash');
                 eyeIcon.classList.add('fa-eye');
             }
@@ -401,6 +396,25 @@
         document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
+            // Validar que todos los campos requeridos estén completos
+            const requiredFields = ['nombre', 'apellido', 'email', 'password', 'password_confirmation'];
+            let isValid = true;
+            
+            requiredFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    field.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    field.classList.remove('border-red-500');
+                }
+            });
+            
+            if (!isValid) {
+                showMessage('Por favor, completa todos los campos requeridos', 'error');
+                return;
+            }
+            
             if (!document.getElementById('terms').checked) {
                 showMessage('Debes aceptar los términos y condiciones', 'error');
                 return;
@@ -412,13 +426,13 @@
             
             // Get form data
             const formData = {
-                nombre_usuario: document.getElementById('nombre').value,
-                apellido_usuario: document.getElementById('apellido').value,
-                email: document.getElementById('email').value,
+                nombre_usuario: document.getElementById('nombre').value.trim(),
+                apellido: document.getElementById('apellido').value.trim(),
+                email: document.getElementById('email').value.trim(),
                 password: document.getElementById('password').value,
                 password_confirmation: document.getElementById('password_confirmation').value,
                 estado: true,
-                rol_id: 2 // Rol de usuario por defecto
+                rol_id: 3 // Rol de usuario por defecto
             };
             
             // Show loading state

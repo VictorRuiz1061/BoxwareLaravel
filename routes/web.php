@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ViewController;
 
 /**
  * Rutas Web del Sistema de Bodega SENA
@@ -14,18 +15,14 @@ use Illuminate\Support\Facades\Route;
 // ============================================================================
 
 /**
- * Página principal - Redirige al login
- */
-Route::get('/', function () {
-    return redirect()->route('login');
-})->name('home');
-
-/**
  * Página de login
  */
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/', [ViewController::class, 'login'])->name('login');
+
+/**
+ * Página de registro
+ */
+Route::get('/register', [ViewController::class, 'register'])->name('register');
 
 // ============================================================================
 // RUTAS PROTEGIDAS (Requieren autenticación)
@@ -33,18 +30,16 @@ Route::get('/login', function () {
 
 /**
  * Panel de administración
- * Solo accesible para usuarios autenticados
+ * Acceso público temporalmente
  */
 Route::get('/admin', function () {
     return view('admin');
-})->name('admin')->middleware('auth');
+})->name('admin'); // SIN middleware('auth')
 
 /**
- * Página de bienvenida
+ * Página de bienvenida (protegida)
  */
-Route::get('/welcome', function () {
-    return view('welcome');
-})->name('welcome')->middleware('auth');
+Route::get('/welcome', [ViewController::class, 'welcome'])->name('welcome')->middleware('auth');
 
 // ============================================================================
 // RUTAS DE FALLBACK (Manejo de errores)
