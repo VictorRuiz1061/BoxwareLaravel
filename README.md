@@ -1,61 +1,259 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📚 Documentación de Rutas - Sistema de Bodega SENA
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## 📋 Índice
+- [Rutas API](#rutas-api)
+- [Rutas Web](#rutas-web)
+- [Comandos de Consola](#comandos-de-consola)
+- [Autenticación y Autorización](#autenticación-y-autorización)
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## 🚀 Rutas API
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 🔓 Rutas Públicas (Sin Autenticación)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `POST` | `/api/login` | `AuthController@login` | Inicio de sesión de usuario |
+| `POST` | `/api/register` | `AuthController@register` | Registro de nuevos usuarios |
 
-## Learning Laravel
+### 🔒 Rutas Protegidas (Con Autenticación)
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+#### 👤 Gestión de Sesión
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/user` | `AuthController@user` | Obtener información del usuario actual |
+| `POST` | `/api/logout` | `AuthController@logout` | Cerrar sesión del usuario |
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+#### 📖 Catálogos (Solo Lectura)
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/categorias-elementos` | `CategoriaElementoController@index` | Listar categorías de elementos |
+| `GET` | `/api/municipios` | `MunicipioController@index` | Listar municipios |
+| `GET` | `/api/centros` | `CentroController@index` | Listar centros del SENA |
+| `GET` | `/api/sedes` | `SedeController@index` | Listar sedes |
+| `GET` | `/api/areas` | `AreaController@index` | Listar áreas de formación |
+| `GET` | `/api/programas` | `ProgramaController@index` | Listar programas de formación |
+| `GET` | `/api/modulos` | `ModuloController@index` | Listar módulos del sistema |
+| `GET` | `/api/tipo-materiales` | `TipoMaterialController@index` | Listar tipos de materiales |
+| `GET` | `/api/caracteristicas` | `CaracteristicaController@index` | Listar características |
+| `GET` | `/api/tipos-sitio` | `TipoSitioController@index` | Listar tipos de sitios |
+| `GET` | `/api/tipos-movimiento` | `TipoMovimientoController@index` | Listar tipos de movimientos |
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+#### 📦 Gestión de Inventario (CRUD Completo)
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/materiales` | `MaterialController@index` | Listar materiales |
+| `POST` | `/api/materiales` | `MaterialController@store` | Crear material |
+| `GET` | `/api/materiales/{id}` | `MaterialController@show` | Ver material específico |
+| `PUT` | `/api/materiales/{id}` | `MaterialController@update` | Actualizar material |
+| `DELETE` | `/api/materiales/{id}` | `MaterialController@destroy` | Eliminar material |
 
-## Laravel Sponsors
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/sitios` | `SitioController@index` | Listar sitios |
+| `POST` | `/api/sitios` | `SitioController@store` | Crear sitio |
+| `GET` | `/api/sitios/{id}` | `SitioController@show` | Ver sitio específico |
+| `PUT` | `/api/sitios/{id}` | `SitioController@update` | Actualizar sitio |
+| `DELETE` | `/api/sitios/{id}` | `SitioController@destroy` | Eliminar sitio |
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/inventarios` | `InventarioController@index` | Listar inventario |
+| `POST` | `/api/inventarios` | `InventarioController@store` | Crear registro de inventario |
+| `GET` | `/api/inventarios/{id}` | `InventarioController@show` | Ver inventario específico |
+| `PUT` | `/api/inventarios/{id}` | `InventarioController@update` | Actualizar inventario |
+| `DELETE` | `/api/inventarios/{id}` | `InventarioController@destroy` | Eliminar inventario |
 
-### Premium Partners
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/movimientos` | `MovimientoController@index` | Listar movimientos |
+| `POST` | `/api/movimientos` | `MovimientoController@store` | Crear movimiento |
+| `GET` | `/api/movimientos/{id}` | `MovimientoController@show` | Ver movimiento específico |
+| `PUT` | `/api/movimientos/{id}` | `MovimientoController@update` | Actualizar movimiento |
+| `DELETE` | `/api/movimientos/{id}` | `MovimientoController@destroy` | Eliminar movimiento |
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/fichas` | `FichaController@index` | Listar fichas |
+| `POST` | `/api/fichas` | `FichaController@store` | Crear ficha |
+| `GET` | `/api/fichas/{id}` | `FichaController@show` | Ver ficha específica |
+| `PUT` | `/api/fichas/{id}` | `FichaController@update` | Actualizar ficha |
+| `DELETE` | `/api/fichas/{id}` | `FichaController@destroy` | Eliminar ficha |
 
-## Contributing
+### 👑 Rutas de Administrador (Middleware IsAdmin)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+#### 👥 Gestión de Usuarios y Roles
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/usuarios` | `UsuarioController@index` | Listar usuarios |
+| `POST` | `/api/usuarios` | `UsuarioController@store` | Crear usuario |
+| `GET` | `/api/usuarios/{id}` | `UsuarioController@show` | Ver usuario específico |
+| `PUT` | `/api/usuarios/{id}` | `UsuarioController@update` | Actualizar usuario |
+| `DELETE` | `/api/usuarios/{id}` | `UsuarioController@destroy` | Eliminar usuario |
 
-## Code of Conduct
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/roles` | `RolController@index` | Listar roles |
+| `POST` | `/api/roles` | `RolController@store` | Crear rol |
+| `GET` | `/api/roles/{id}` | `RolController@show` | Ver rol específico |
+| `PUT` | `/api/roles/{id}` | `RolController@update` | Actualizar rol |
+| `DELETE` | `/api/roles/{id}` | `RolController@destroy` | Eliminar rol |
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+#### 🔐 Gestión de Permisos
+| Método | Ruta | Controlador | Descripción |
+|--------|------|-------------|-------------|
+| `GET` | `/api/permisos` | `PermisoController@index` | Listar permisos |
+| `POST` | `/api/permisos` | `PermisoController@store` | Crear permiso |
+| `GET` | `/api/permisos/{id}` | `PermisoController@show` | Ver permiso específico |
+| `PUT` | `/api/permisos/{id}` | `PermisoController@update` | Actualizar permiso |
+| `DELETE` | `/api/permisos/{id}` | `PermisoController@destroy` | Eliminar permiso |
 
-## Security Vulnerabilities
+#### 📚 Gestión Completa de Catálogos
+Los administradores tienen acceso completo a todos los catálogos (CRUD completo):
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+- `/api/categorias-elementos` (excepto index)
+- `/api/municipios` (excepto index)
+- `/api/centros` (excepto index)
+- `/api/sedes` (excepto index)
+- `/api/areas` (excepto index)
+- `/api/programas` (excepto index)
+- `/api/modulos` (excepto index)
+- `/api/tipo-materiales` (excepto index)
+- `/api/caracteristicas` (excepto index)
+- `/api/tipos-sitio` (excepto index)
+- `/api/tipos-movimiento` (excepto index)
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 🌐 Rutas Web
+
+### 🔓 Rutas Públicas
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/` | Página principal (redirige a login) |
+| `GET` | `/login` | Página de inicio de sesión |
+
+### 🔒 Rutas Protegidas
+| Método | Ruta | Descripción | Middleware |
+|--------|------|-------------|------------|
+| `GET` | `/admin` | Panel de administración | `auth` |
+| `GET` | `/welcome` | Página de bienvenida | `auth` |
+
+---
+
+## ⚡ Comandos de Consola
+
+### 🔧 Comandos de Mantenimiento
+| Comando | Descripción |
+|---------|-------------|
+| `php artisan inspire` | Mostrar frase inspiradora |
+| `php artisan sistema:limpiar` | Limpiar y optimizar el sistema |
+| `php artisan sistema:estado` | Verificar estado del sistema |
+| `php artisan sistema:seed-demo` | Generar datos de demostración |
+
+---
+
+## 🔐 Autenticación y Autorización
+
+### Middleware Utilizados
+
+#### `IsUserAuth`
+- **Propósito**: Verificar que el usuario esté autenticado
+- **Aplicación**: Todas las rutas protegidas de la API
+- **Comportamiento**: Redirige al login si no está autenticado
+
+#### `IsAdmin`
+- **Propósito**: Verificar que el usuario tenga rol de administrador
+- **Aplicación**: Rutas exclusivas de administración
+- **Comportamiento**: Deniega acceso si no es administrador
+
+#### `throttle`
+- **Propósito**: Limitar intentos de acceso
+- **Aplicación**: 
+  - Login: 5 intentos por minuto
+  - Registro: 3 intentos por minuto
+
+### Flujo de Autenticación
+
+1. **Login**: `POST /api/login`
+   - Valida credenciales
+   - Crea sesión
+   - Retorna información del usuario
+
+2. **Verificación**: `GET /api/user`
+   - Verifica sesión activa
+   - Retorna datos del usuario
+
+3. **Logout**: `POST /api/logout`
+   - Invalida sesión
+   - Limpia tokens
+
+---
+
+## 📝 Notas Importantes
+
+### Códigos de Respuesta HTTP
+- `200`: Operación exitosa
+- `201`: Recurso creado exitosamente
+- `204`: Operación exitosa sin contenido
+- `401`: No autenticado
+- `403`: No autorizado
+- `404`: Recurso no encontrado
+- `422`: Error de validación
+- `500`: Error interno del servidor
+
+### Formato de Respuestas
+Todas las respuestas API están en formato JSON con la siguiente estructura:
+
+```json
+{
+    "success": true,
+    "message": "Operación exitosa",
+    "data": {
+        // Datos del recurso
+    }
+}
+```
+
+### Validaciones
+- Todos los endpoints de creación y actualización incluyen validaciones
+- Los errores de validación retornan código 422 con detalles
+- Las validaciones están definidas en los controladores y Request classes
+
+---
+
+## 🚀 Uso de las Rutas
+
+### Ejemplo de Login
+```bash
+curl -X POST http://localhost:8000/api/login \
+  -H "Content-Type: application/json" \
+  -d '{"email": "admin@sena.edu.co", "password": "password"}'
+```
+
+### Ejemplo de Obtener Materiales
+```bash
+curl -X GET http://localhost:8000/api/materiales \
+  -H "Authorization: Bearer {token}" \
+  -H "Accept: application/json"
+```
+
+### Ejemplo de Crear Material
+```bash
+curl -X POST http://localhost:8000/api/materiales \
+  -H "Authorization: Bearer {token}" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "codigo_sena": "MAT001",
+    "nombre_material": "Laptop",
+    "descripcion_material": "Laptop para prácticas",
+    "unidad_medida": "Unidad",
+    "producto_peresedero": false,
+    "estado": true,
+    "fecha_vencimiento": "2025-12-31",
+    "categoria_id": 1,
+    "tipo_material_id": 1
+  }'
+``` 
