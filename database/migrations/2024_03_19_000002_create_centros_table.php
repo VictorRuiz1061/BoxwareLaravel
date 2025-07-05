@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id('id_centro');
             $table->string('nombre_centro', 255);
             $table->boolean('estado');
+            $table->foreignId('municipio_id')->constrained('municipios', 'id_municipio');
             $table->timestamp('fecha_creacion');
             $table->timestamp('fecha_modificacion');
-            $table->foreignId('municipio_id')->constrained('municipios', 'id_municipio');
         });
     }
 

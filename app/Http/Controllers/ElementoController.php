@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\CategoriaElemento;
+use App\Http\Requests\CategoriaElementoRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,24 +38,27 @@ class ElementoController extends Controller
     /**
      * Crear una nueva categoría de elemento
      * 
-     * @param Request $request Datos de la categoría de elemento a crear
+     * @param CategoriaElementoRequest $request Datos validados de la categoría de elemento a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna la categoría de elemento creada con código de estado 201
      */
-    public function store(Request $request)
+    public function store(CategoriaElementoRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre_categoria' => 'required|string|max:255',
-            'descripcion_categoria' => 'required|string',
-            'estado' => 'required|boolean',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-        ]);
-
-        // Crear la nueva categoría de elemento
-        $categoriaElemento = CategoriaElemento::create($request->all());
-        return response()->json($categoriaElemento, 201);
+        try {
+            $categoriaElemento = CategoriaElemento::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoría de elemento creada exitosamente',
+                'data' => $categoriaElemento
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear la categoría de elemento',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -73,26 +77,29 @@ class ElementoController extends Controller
     /**
      * Actualizar una categoría de elemento existente
      * 
-     * @param Request $request Datos actualizados de la categoría de elemento
+     * @param CategoriaElementoRequest $request Datos validados de la categoría de elemento a actualizar
      * @param int $id ID de la categoría de elemento a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna la categoría de elemento actualizada
      */
-    public function update(Request $request, $id)
+    public function update(CategoriaElementoRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'nombre_categoria' => 'sometimes|string|max:255',
-            'descripcion_categoria' => 'sometimes|string',
-            'estado' => 'sometimes|boolean',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-        ]);
-
-        // Buscar y actualizar la categoría de elemento
-        $categoriaElemento = CategoriaElemento::findOrFail($id);
-        $categoriaElemento->update($request->all());
-        return response()->json($categoriaElemento);
+        try {
+            $categoriaElemento = CategoriaElemento::findOrFail($id);
+            $categoriaElemento->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Categoría de elemento actualizada exitosamente',
+                'data' => $categoriaElemento
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar la categoría de elemento',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

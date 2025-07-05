@@ -6,21 +6,10 @@ use App\Http\Controllers\ViewController;
 use App\Http\Middleware\IsAdmin;
 use App\Http\Middleware\IsUserAuth;
 
-/**
- * Rutas API del Sistema de Bodega SENA
- * 
- * Este archivo contiene las rutas API básicas del sistema de gestión de inventario.
- * Las rutas están organizadas por niveles de acceso y funcionalidad.
- */
-
 // ============================================================================
 // RUTAS PÚBLICAS (No requieren autenticación)
 // ============================================================================
 
-/**
- * Autenticación de usuarios
- * Permite el registro y login de usuarios sin autenticación previa
- */
 Route::post('login', [AuthController::class, 'login'])
     ->name('auth.login')
     ->middleware('throttle:5,1'); // Limitar intentos de login
@@ -42,6 +31,8 @@ Route::middleware(IsUserAuth::class)->group(function () {
         ->name('auth.user');
     Route::post('logout', [AuthController::class, 'logout'])
         ->name('auth.logout');
+    Route::post('logout-all', [AuthController::class, 'revokeAllTokens'])
+        ->name('auth.logout-all');
 
     /**
      * Rutas del Dashboard

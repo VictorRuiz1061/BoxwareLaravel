@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RolRequest extends FormRequest
+class TipoSitioRequest extends FormRequest
 {
     public function authorize()
     {
@@ -14,9 +14,8 @@ class RolRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_rol' => 'required|string|max:100',
-            'descripcion' => 'required|string',
-            'estado' => 'required|string|max:50',
+            'nombre_tipo_sitio' => 'required|string|max:255',
+            'estado' => 'required|boolean',
             'fecha_creacion' => 'required|date',
             'fecha_modificacion' => 'required|date',
         ];
@@ -25,16 +24,12 @@ class RolRequest extends FormRequest
     public function messages()
     {
         return [
-            'nombre_rol.required' => 'El campo nombre del rol es obligatorio.',
-            'nombre_rol.string' => 'El campo nombre del rol debe ser una cadena de texto.',
-            'nombre_rol.max' => 'El campo nombre del rol no puede tener más de 100 caracteres.',
-            
-            'descripcion.required' => 'El campo descripción es obligatorio.',
-            'descripcion.string' => 'El campo descripción debe ser una cadena de texto.',
+            'nombre_tipo_sitio.required' => 'El campo nombre del tipo de sitio es obligatorio.',
+            'nombre_tipo_sitio.string' => 'El campo nombre del tipo de sitio debe ser una cadena de texto.',
+            'nombre_tipo_sitio.max' => 'El campo nombre del tipo de sitio no puede tener más de 255 caracteres.',
             
             'estado.required' => 'El campo estado es obligatorio.',
-            'estado.string' => 'El campo estado debe ser una cadena de texto.',
-            'estado.max' => 'El campo estado no puede tener más de 50 caracteres.',
+            'estado.boolean' => 'El campo estado debe ser verdadero o falso.',
             
             'fecha_creacion.required' => 'El campo fecha de creación es obligatorio.',
             'fecha_creacion.date' => 'El campo fecha de creación debe ser una fecha válida.',

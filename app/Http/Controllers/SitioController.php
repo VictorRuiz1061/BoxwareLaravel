@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sitio;
+use App\Http\Requests\SitioRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,26 +38,27 @@ class SitioController extends Controller
     /**
      * Crear un nuevo sitio
      * 
-     * @param Request $request Datos del sitio a crear
+     * @param SitioRequest $request Datos validados del sitio a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el sitio creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(SitioRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre_sitio' => 'required|string|max:255',
-            'ubicacion' => 'required|string|max:255',
-            'ficha_tecnica' => 'required|string|max:255',
-            'estado' => 'required|boolean',
-            'tipo_sitio_id' => 'required|exists:tipos_sitio,id_tipo_sitio',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-        ]);
-
-        // Crear el nuevo sitio
-        $sitio = Sitio::create($request->all());
-        return response()->json($sitio, 201);
+        try {
+            $sitio = Sitio::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Sitio creado exitosamente',
+                'data' => $sitio
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el sitio',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -75,28 +77,29 @@ class SitioController extends Controller
     /**
      * Actualizar un sitio existente
      * 
-     * @param Request $request Datos actualizados del sitio
+     * @param SitioRequest $request Datos validados del sitio a actualizar
      * @param int $id ID del sitio a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el sitio actualizado
      */
-    public function update(Request $request, $id)
+    public function update(SitioRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'nombre_sitio' => 'sometimes|string|max:255',
-            'ubicacion' => 'sometimes|string|max:255',
-            'ficha_tecnica' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|boolean',
-            'tipo_sitio_id' => 'sometimes|exists:tipos_sitio,id_tipo_sitio',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-        ]);
-
-        // Buscar y actualizar el sitio
-        $sitio = Sitio::findOrFail($id);
-        $sitio->update($request->all());
-        return response()->json($sitio);
+        try {
+            $sitio = Sitio::findOrFail($id);
+            $sitio->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Sitio actualizado exitosamente',
+                'data' => $sitio
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el sitio',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

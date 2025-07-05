@@ -8,96 +8,82 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
         .input-focus:focus {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #374151;
+            box-shadow: 0 0 0 1px #374151;
         }
         .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #1f2937;
         }
     </style>
 </head>
-<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
-    <!-- Fondo animado -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-    </div>
-
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
     <!-- Contenedor principal -->
-    <div class="relative w-full max-w-md">
+    <div class="w-full max-w-md">
         <!-- Tarjeta de login -->
-        <div class="glass-effect rounded-3xl shadow-2xl p-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                    <i class="fas fa-warehouse text-2xl text-white"></i>
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
+                    <i class="fas fa-warehouse text-lg text-gray-600"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Bodega SENA</h1>
-                <p class="text-white/80">Sistema de Gestión de Inventario</p>
+                <h1 class="text-2xl font-semibold text-gray-900 mb-1">Bodega SENA</h1>
+                <p class="text-sm text-gray-600">Sistema de Gestión de Inventario</p>
             </div>
 
             <!-- Formulario de login -->
-            <form id="loginForm" class="space-y-6">
+            <form id="loginForm" class="space-y-5">
                 <!-- Campo Email -->
                 <div>
-                    <label for="email" class="block text-sm font-medium text-white/90 mb-2">
-                        <i class="fas fa-envelope mr-2"></i>Correo Electrónico
+                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                        Correo Electrónico
                     </label>
                     <div class="relative">
                         <input 
                             type="email" 
                             id="email" 
                             name="email"
-                            class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                             placeholder="usuario@sena.edu.co"
                             required
                         >
                         <div class="absolute inset-y-0 right-0 pr-3 flex items-center">
-                            <i class="fas fa-user text-white/60"></i>
+                            <i class="fas fa-envelope text-gray-400 text-sm"></i>
                         </div>
                     </div>
                 </div>
 
                 <!-- Campo Contraseña -->
                 <div>
-                    <label for="password" class="block text-sm font-medium text-white/90 mb-2">
-                        <i class="fas fa-lock mr-2"></i>Contraseña
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        Contraseña
                     </label>
                     <div class="relative">
                         <input 
                             type="password" 
                             id="password" 
                             name="password"
-                            class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                             placeholder="••••••••"
                             required
                         >
                         <button 
                             type="button" 
                             id="togglePassword"
-                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-white/60 hover:text-white transition-colors"
+                            class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
                         >
-                            <i class="fas fa-eye" id="eyeIcon"></i>
+                            <i class="fas fa-eye text-sm" id="eyeIcon"></i>
                         </button>
                     </div>
                 </div>
 
                 <!-- Checkbox Recordar -->
                 <div class="flex items-center justify-between">
-                    <label class="flex items-center text-white/80 text-sm">
-                        <input type="checkbox" id="remember" class="mr-2 rounded border-white/30 bg-white/20">
+                    <label class="flex items-center text-gray-700 text-sm">
+                        <input type="checkbox" id="remember" class="mr-2 rounded border-gray-300 text-gray-900 focus:ring-gray-500">
                         Recordar sesión
                     </label>
-                    <a href="#" class="text-white/80 text-sm hover:text-white transition-colors">
+                    <a href="#" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">
                         ¿Olvidaste tu contraseña?
                     </a>
                 </div>
@@ -106,9 +92,8 @@
                 <button 
                     type="submit" 
                     id="submitBtn"
-                    class="w-full py-3 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300 flex items-center justify-center"
+                    class="w-full py-2 px-4 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-md btn-hover transition-colors flex items-center justify-center"
                 >
-                    <i class="fas fa-sign-in-alt mr-2"></i>
                     <span id="btnText">Iniciar Sesión</span>
                     <div id="loadingSpinner" class="hidden ml-2">
                         <i class="fas fa-spinner fa-spin"></i>
@@ -118,9 +103,9 @@
 
             <!-- Enlaces adicionales -->
             <div class="mt-6 text-center">
-                <p class="text-white/80 text-sm">
+                <p class="text-gray-600 text-sm">
                     ¿No tienes cuenta? 
-                    <a href="/register" class="text-white font-semibold hover:underline transition-colors">
+                    <a href="/register" class="text-gray-900 font-medium hover:underline transition-colors">
                         Regístrate aquí
                     </a>
                 </p>
@@ -132,7 +117,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-6">
-            <p class="text-white/60 text-sm">
+            <p class="text-gray-500 text-xs">
                 © 2024 Servicio Nacional de Aprendizaje SENA
             </p>
         </div>
@@ -227,10 +212,10 @@
         function showMessage(message, type) {
             const resultDiv = document.getElementById('result');
             const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            const color = type === 'success' ? 'text-green-400' : 'text-red-400';
+            const color = type === 'success' ? 'text-green-600' : 'text-red-600';
             
             resultDiv.innerHTML = `
-                <div class="flex items-center justify-center space-x-2 ${color}">
+                <div class="flex items-center justify-center space-x-2 ${color} text-sm">
                     <i class="${icon}"></i>
                     <span>${message}</span>
                 </div>
@@ -241,17 +226,6 @@
                 resultDiv.innerHTML = '';
             }, 5000);
         }
-
-        // Add input animations
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('scale-105');
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('scale-105');
-            });
-        });
     </script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Http\Requests\AreaRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,24 +38,27 @@ class AreaController extends Controller
     /**
      * Crear una nueva área
      * 
-     * @param Request $request Datos del área a crear
+     * @param AreaRequest $request Datos validados del área a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el área creada con código de estado 201
      */
-    public function store(Request $request)
+    public function store(AreaRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre_area' => 'required|string|max:255',
-            'estado' => 'required|boolean',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-            'sede_id' => 'required|exists:sedes,id_sede',
-        ]);
-
-        // Crear la nueva área
-        $area = Area::create($request->all());
-        return response()->json($area, 201);
+        try {
+            $area = Area::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Área creada exitosamente',
+                'data' => $area
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el área',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -73,26 +77,29 @@ class AreaController extends Controller
     /**
      * Actualizar un área existente
      * 
-     * @param Request $request Datos actualizados del área
+     * @param AreaRequest $request Datos validados del área a actualizar
      * @param int $id ID del área a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el área actualizada
      */
-    public function update(Request $request, $id)
+    public function update(AreaRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'nombre_area' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|boolean',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-            'sede_id' => 'sometimes|exists:sedes,id_sede',
-        ]);
-
-        // Buscar y actualizar el área
-        $area = Area::findOrFail($id);
-        $area->update($request->all());
-        return response()->json($area);
+        try {
+            $area = Area::findOrFail($id);
+            $area->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Área actualizada exitosamente',
+                'data' => $area
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el área',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

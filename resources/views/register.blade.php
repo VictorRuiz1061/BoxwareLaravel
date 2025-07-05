@@ -8,20 +8,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-        }
         .input-focus:focus {
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #374151;
+            box-shadow: 0 0 0 1px #374151;
         }
         .btn-hover:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            background-color: #1f2937;
         }
         .form-step {
             display: none;
@@ -31,65 +23,59 @@
         }
     </style>
 </head>
-<body class="min-h-screen gradient-bg flex items-center justify-center p-4">
-    <!-- Fondo animado -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl"></div>
-    </div>
-
+<body class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
     <!-- Contenedor principal -->
-    <div class="relative w-full max-w-lg">
+    <div class="w-full max-w-lg">
         <!-- Tarjeta de registro -->
-        <div class="glass-effect rounded-3xl shadow-2xl p-8">
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-8">
             <!-- Header -->
             <div class="text-center mb-8">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-white/20 rounded-full mb-4">
-                    <i class="fas fa-user-plus text-2xl text-white"></i>
+                <div class="inline-flex items-center justify-center w-12 h-12 bg-gray-100 rounded-full mb-4">
+                    <i class="fas fa-user-plus text-lg text-gray-600"></i>
                 </div>
-                <h1 class="text-3xl font-bold text-white mb-2">Crear Cuenta</h1>
-                <p class="text-white/80">Únete al Sistema de Bodega SENA</p>
+                <h1 class="text-2xl font-semibold text-gray-900 mb-1">Crear Cuenta</h1>
+                <p class="text-sm text-gray-600">Únete al Sistema de Bodega SENA</p>
             </div>
 
             <!-- Indicador de progreso -->
             <div class="flex justify-center mb-6">
                 <div class="flex space-x-2">
-                    <div class="w-3 h-3 bg-white rounded-full step-indicator active" data-step="1"></div>
-                    <div class="w-3 h-3 bg-white/40 rounded-full step-indicator" data-step="2"></div>
-                    <div class="w-3 h-3 bg-white/40 rounded-full step-indicator" data-step="3"></div>
+                    <div class="w-2 h-2 bg-gray-900 rounded-full step-indicator active" data-step="1"></div>
+                    <div class="w-2 h-2 bg-gray-300 rounded-full step-indicator" data-step="2"></div>
+                    <div class="w-2 h-2 bg-gray-300 rounded-full step-indicator" data-step="3"></div>
                 </div>
             </div>
 
             <!-- Formulario de registro -->
-            <form id="registerForm" class="space-y-6">
+            <form id="registerForm" class="space-y-5">
                 <!-- Paso 1: Información Personal -->
                 <div class="form-step active" id="step1">
-                    <h3 class="text-lg font-semibold text-white mb-4">Información Personal</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Información Personal</h3>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <label for="nombre" class="block text-sm font-medium text-white/90 mb-2">
-                                <i class="fas fa-user mr-2"></i>Nombre
+                            <label for="nombre" class="block text-sm font-medium text-gray-700 mb-2">
+                                Nombre
                             </label>
                             <input 
                                 type="text" 
                                 id="nombre" 
                                 name="nombre_usuario"
-                                class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                                 placeholder="Tu nombre"
                                 required
                             >
                         </div>
                         
                         <div>
-                            <label for="apellido" class="block text-sm font-medium text-white/90 mb-2">
-                                <i class="fas fa-user mr-2"></i>Apellido
+                            <label for="apellido" class="block text-sm font-medium text-gray-700 mb-2">
+                                Apellido
                             </label>
                             <input 
                                 type="text" 
                                 id="apellido" 
                                 name="apellido_usuario"
-                                class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                                 placeholder="Tu apellido"
                                 required
                             >
@@ -97,14 +83,14 @@
                     </div>
                     
                     <div class="mt-4">
-                        <label for="email" class="block text-sm font-medium text-white/90 mb-2">
-                            <i class="fas fa-envelope mr-2"></i>Correo Electrónico
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                            Correo Electrónico
                         </label>
                         <input 
                             type="email" 
                             id="email" 
                             name="email"
-                            class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                             placeholder="usuario@sena.edu.co"
                             required
                         >
@@ -113,7 +99,7 @@
                     <div class="flex justify-end mt-6">
                         <button 
                             type="button" 
-                            class="px-6 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300"
+                            class="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-md btn-hover transition-colors"
                             onclick="nextStep()"
                         >
                             Siguiente <i class="fas fa-arrow-right ml-2"></i>
@@ -123,41 +109,41 @@
 
                 <!-- Paso 2: Seguridad -->
                 <div class="form-step" id="step2">
-                    <h3 class="text-lg font-semibold text-white mb-4">Seguridad</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Seguridad</h3>
                     
                     <div>
-                        <label for="password" class="block text-sm font-medium text-white/90 mb-2">
-                            <i class="fas fa-lock mr-2"></i>Contraseña
+                        <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                            Contraseña
                         </label>
                         <div class="relative">
                             <input 
                                 type="password" 
                                 id="password" 
                                 name="password"
-                                class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                                 placeholder="••••••••"
                                 required
                             >
                             <button 
                                 type="button" 
                                 id="togglePassword"
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-white/60 hover:text-white transition-colors"
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 transition-colors"
                             >
-                                <i class="fas fa-eye" id="eyeIcon"></i>
+                                <i class="fas fa-eye text-sm" id="eyeIcon"></i>
                             </button>
                         </div>
                     </div>
                     
                     <div class="mt-4">
-                        <label for="password_confirmation" class="block text-sm font-medium text-white/90 mb-2">
-                            <i class="fas fa-lock mr-2"></i>Confirmar Contraseña
+                        <label for="password_confirmation" class="block text-sm font-medium text-gray-700 mb-2">
+                            Confirmar Contraseña
                         </label>
                         <div class="relative">
                             <input 
                                 type="password" 
                                 id="password_confirmation" 
                                 name="password_confirmation"
-                                class="w-full px-4 py-3 bg-white/20 border border-white/30 rounded-xl text-white placeholder-white/60 focus:outline-none input-focus transition-all duration-300"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md text-gray-900 placeholder-gray-500 focus:outline-none input-focus transition-colors"
                                 placeholder="••••••••"
                                 required
                             >
@@ -167,24 +153,24 @@
                     <!-- Indicador de fortaleza de contraseña -->
                     <div class="mt-4">
                         <div class="flex space-x-2">
-                            <div class="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
-                                <div id="passwordStrength" class="h-full bg-red-400 transition-all duration-300" style="width: 0%"></div>
+                            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+                                <div id="passwordStrength" class="h-full bg-red-500 transition-all duration-300" style="width: 0%"></div>
                             </div>
                         </div>
-                        <p id="passwordText" class="text-xs text-white/60 mt-1">Fortaleza de la contraseña</p>
+                        <p id="passwordText" class="text-xs text-gray-500 mt-1">Fortaleza de la contraseña</p>
                     </div>
                     
                     <div class="flex justify-between mt-6">
                         <button 
                             type="button" 
-                            class="px-6 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300"
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-md transition-colors"
                             onclick="prevStep()"
                         >
                             <i class="fas fa-arrow-left mr-2"></i> Anterior
                         </button>
                         <button 
                             type="button" 
-                            class="px-6 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300"
+                            class="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-md btn-hover transition-colors"
                             onclick="nextStep()"
                         >
                             Siguiente <i class="fas fa-arrow-right ml-2"></i>
@@ -194,21 +180,33 @@
 
                 <!-- Paso 3: Confirmación -->
                 <div class="form-step" id="step3">
-                    <h3 class="text-lg font-semibold text-white mb-4">Confirmación</h3>
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Confirmación</h3>
                     
-                    <div class="bg-white/10 rounded-xl p-4 mb-4">
-                        <h4 class="text-white font-semibold mb-2">Resumen de tu cuenta:</h4>
-                        <div class="space-y-2 text-white/80 text-sm">
+                    <div class="bg-gray-50 rounded-lg p-4 mb-4">
+                        <h4 class="text-gray-900 font-medium mb-2">Resumen de tu cuenta:</h4>
+                        <div class="space-y-2 text-gray-600 text-sm">
                             <p><strong>Nombre:</strong> <span id="summaryNombre"></span></p>
                             <p><strong>Apellido:</strong> <span id="summaryApellido"></span></p>
                             <p><strong>Email:</strong> <span id="summaryEmail"></span></p>
                         </div>
                     </div>
                     
+                    <div class="flex items-center mb-4">
+                        <input 
+                            type="checkbox" 
+                            id="terms" 
+                            class="mr-2 rounded border-gray-300 text-gray-900 focus:ring-gray-500"
+                            required
+                        >
+                        <label for="terms" class="text-sm text-gray-700">
+                            Acepto los términos y condiciones
+                        </label>
+                    </div>
+                    
                     <div class="flex justify-between">
                         <button 
                             type="button" 
-                            class="px-6 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300"
+                            class="px-4 py-2 bg-gray-200 hover:bg-gray-300 text-gray-700 font-medium rounded-md transition-colors"
                             onclick="prevStep()"
                         >
                             <i class="fas fa-arrow-left mr-2"></i> Anterior
@@ -216,9 +214,8 @@
                         <button 
                             type="submit" 
                             id="submitBtn"
-                            class="px-6 py-2 bg-white/20 hover:bg-white/30 text-white font-semibold rounded-xl btn-hover transition-all duration-300 flex items-center"
+                            class="px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white font-medium rounded-md btn-hover transition-colors flex items-center"
                         >
-                            <i class="fas fa-user-plus mr-2"></i>
                             <span id="btnText">Crear Cuenta</span>
                             <div id="loadingSpinner" class="hidden ml-2">
                                 <i class="fas fa-spinner fa-spin"></i>
@@ -230,9 +227,9 @@
 
             <!-- Enlaces adicionales -->
             <div class="mt-6 text-center">
-                <p class="text-white/80 text-sm">
+                <p class="text-gray-600 text-sm">
                     ¿Ya tienes cuenta? 
-                    <a href="/login" class="text-white font-semibold hover:underline transition-colors">
+                    <a href="/login" class="text-gray-900 font-medium hover:underline transition-colors">
                         Inicia sesión aquí
                     </a>
                 </p>
@@ -244,7 +241,7 @@
 
         <!-- Footer -->
         <div class="text-center mt-6">
-            <p class="text-white/60 text-sm">
+            <p class="text-gray-500 text-xs">
                 © 2024 Servicio Nacional de Aprendizaje SENA
             </p>
         </div>
@@ -282,11 +279,11 @@
         function updateStepIndicators() {
             document.querySelectorAll('.step-indicator').forEach((indicator, index) => {
                 if (index + 1 <= currentStep) {
-                    indicator.classList.add('bg-white');
-                    indicator.classList.remove('bg-white/40');
+                    indicator.classList.add('bg-gray-900');
+                    indicator.classList.remove('bg-gray-300');
                 } else {
-                    indicator.classList.remove('bg-white');
-                    indicator.classList.add('bg-white/40');
+                    indicator.classList.remove('bg-gray-900');
+                    indicator.classList.add('bg-gray-300');
                 }
             });
         }
@@ -347,12 +344,10 @@
             
             if (passwordInput.type === 'password') {
                 passwordInput.type = 'text';
-                passwordInput.removeAttribute('required'); // Remover required temporalmente
                 eyeIcon.classList.remove('fa-eye');
                 eyeIcon.classList.add('fa-eye-slash');
             } else {
                 passwordInput.type = 'password';
-                passwordInput.setAttribute('required', 'required'); // Restaurar required
                 eyeIcon.classList.remove('fa-eye-slash');
                 eyeIcon.classList.add('fa-eye');
             }
@@ -366,7 +361,7 @@
             
             let strength = 0;
             let text = 'Muy débil';
-            let color = 'bg-red-400';
+            let color = 'bg-red-500';
             
             if (password.length >= 6) strength += 25;
             if (password.match(/[a-z]/)) strength += 25;
@@ -375,16 +370,16 @@
             
             if (strength >= 100) {
                 text = 'Muy fuerte';
-                color = 'bg-green-400';
+                color = 'bg-green-500';
             } else if (strength >= 75) {
                 text = 'Fuerte';
-                color = 'bg-green-500';
+                color = 'bg-green-600';
             } else if (strength >= 50) {
                 text = 'Media';
-                color = 'bg-yellow-400';
+                color = 'bg-yellow-500';
             } else if (strength >= 25) {
                 text = 'Débil';
-                color = 'bg-orange-400';
+                color = 'bg-orange-500';
             }
             
             strengthBar.style.width = strength + '%';
@@ -482,10 +477,10 @@
         function showMessage(message, type) {
             const resultDiv = document.getElementById('result');
             const icon = type === 'success' ? 'fas fa-check-circle' : 'fas fa-exclamation-circle';
-            const color = type === 'success' ? 'text-green-400' : 'text-red-400';
+            const color = type === 'success' ? 'text-green-600' : 'text-red-600';
             
             resultDiv.innerHTML = `
-                <div class="flex items-center justify-center space-x-2 ${color}">
+                <div class="flex items-center justify-center space-x-2 ${color} text-sm">
                     <i class="${icon}"></i>
                     <span>${message}</span>
                 </div>
@@ -496,17 +491,6 @@
                 resultDiv.innerHTML = '';
             }, 5000);
         }
-
-        // Add input animations
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.classList.add('scale-105');
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.classList.remove('scale-105');
-            });
-        });
     </script>
 </body>
-</html> 
+</html>

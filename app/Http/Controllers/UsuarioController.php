@@ -28,21 +28,42 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Crear un nuevo usuario
+     * Crear un nuevo usuario usando FormRequest
      * 
-     * @param UsuarioRequest $request Datos validados del usuario a crear
+     * @param UsuarioRequest $request
      * @return \Illuminate\Http\JsonResponse
-     * Retorna el usuario creado con código de estado 201
      */
     public function store(UsuarioRequest $request)
     {
-        // Obtener datos validados y hashear la contraseña
-        $datos = $request->validated();
-        $datos['password'] = Hash::make($datos['password']);
-        
-        // Crear el nuevo usuario
-        $usuario = Usuario::create($datos);
-        return response()->json($usuario, 201);
+        try {
+            // Los datos ya están validados por el FormRequest
+            $usuario = Usuario::create([
+                'nombre' => $request->nombre,
+                'apellido' => $request->apellido,
+                'edad' => $request->edad,
+                'cedula' => $request->cedula,
+                'email' => $request->email,
+                'password' => Hash::make($request->password),
+                'telefono' => $request->telefono,
+                'direccion' => $request->direccion,
+                'fecha_registro' => $request->fecha_registro,
+                'rol_id' => $request->rol_id,
+                'estado' => true,
+            ]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuario creado exitosamente',
+                'data' => $usuario
+            ], 201);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el usuario',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -59,18 +80,47 @@ class UsuarioController extends Controller
     }
 
     /**
-     * Actualizar un usuario existente
+     * Actualizar un usuario usando FormRequest
      * 
-     * @param UsuarioRequest $request Datos validados del usuario a actualizar
-     * @param int $id ID del usuario a actualizar
+     * @param UsuarioRequest $request
+     * @param int $id
      * @return \Illuminate\Http\JsonResponse
-     * Retorna el usuario actualizado
      */
     public function update(UsuarioRequest $request, $id)
     {
-        $usuario = Usuario::findOrFail($id);
-        $usuario->update($request->validated());
-        return response()->json($usuario);
+        try {
+            $usuario = Usuario::findOrFail($id);
+            
+            $usuario->update([
+                'nombre' => $request->nombre,
+                'apellido' => $request->apellido,
+                'edad' => $request->edad,
+                'cedula' => $request->cedula,
+                'email' => $request->email,
+                'telefono' => $request->telefono,
+                'direccion' => $request->direccion,
+                'rol_id' => $request->rol_id,
+            ]);
+
+            // Solo actualizar contraseña si se proporciona
+            if ($request->filled('password')) {
+                $usuario->password = Hash::make($request->password);
+                $usuario->save();
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Usuario actualizado exitosamente',
+                'data' => $usuario
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el usuario',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

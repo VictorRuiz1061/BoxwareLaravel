@@ -15,8 +15,8 @@ use Laravel\Sanctum\HasApiTokens;
  * Cada usuario tiene un rol específico que determina sus permisos.
  * 
  * @property int $id_usuario Identificador único del usuario
- * @property string $nombre_usuario Nombre del usuario
- * @property string $apellido_usuario Apellido del usuario
+ * @property string $nombre Nombre del usuario
+ * @property string $apellido Apellido del usuario
  * @property string $email Correo electrónico único del usuario
  * @property string $password Contraseña hasheada del usuario
  * @property bool $estado Estado activo/inactivo del usuario
@@ -42,7 +42,7 @@ class Usuario extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nombre_usuario',
+        'nombre',
         'apellido',
         'edad',
         'cedula',

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Movimiento;
+use App\Http\Requests\MovimientoRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -28,25 +29,27 @@ class MovimientoController extends Controller
     /**
      * Crear un nuevo movimiento
      * 
-     * @param Request $request Datos del movimiento a crear
+     * @param MovimientoRequest $request Datos validados del movimiento a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el movimiento creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(MovimientoRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'estado' => 'required|boolean',
-            'cantidad' => 'required|integer',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-            'tipo_movimiento_id' => 'required|exists:tipos_movimiento,id_tipo_movimiento',
-            'material_id' => 'required|exists:materiales,id_material',
-        ]);
-
-        // Crear el nuevo movimiento
-        $movimiento = Movimiento::create($request->all());
-        return response()->json($movimiento, 201);
+        try {
+            $movimiento = Movimiento::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Movimiento creado exitosamente',
+                'data' => $movimiento
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el movimiento',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -65,27 +68,29 @@ class MovimientoController extends Controller
     /**
      * Actualizar un movimiento existente
      * 
-     * @param Request $request Datos actualizados del movimiento
+     * @param MovimientoRequest $request Datos validados del movimiento a actualizar
      * @param int $id ID del movimiento a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el movimiento actualizado
      */
-    public function update(Request $request, $id)
+    public function update(MovimientoRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'estado' => 'sometimes|boolean',
-            'cantidad' => 'sometimes|integer',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-            'tipo_movimiento_id' => 'sometimes|exists:tipos_movimiento,id_tipo_movimiento',
-            'material_id' => 'sometimes|exists:materiales,id_material',
-        ]);
-
-        // Buscar y actualizar el movimiento
-        $movimiento = Movimiento::findOrFail($id);
-        $movimiento->update($request->all());
-        return response()->json($movimiento);
+        try {
+            $movimiento = Movimiento::findOrFail($id);
+            $movimiento->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Movimiento actualizado exitosamente',
+                'data' => $movimiento
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el movimiento',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

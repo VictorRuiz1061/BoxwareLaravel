@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Material;
+use App\Http\Requests\MaterialRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,31 +38,28 @@ class MaterialController extends Controller
     /**
      * Crear un nuevo material
      * 
-     * @param Request $request Datos del material a crear
+     * @param MaterialRequest $request Datos validados del material a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el material creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(MaterialRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'codigo_sena' => 'required|string|max:100',
-            'nombre_material' => 'required|string|max:255',
-            'descripcion_material' => 'required|string',
-            'unidad_medida' => 'required|string|max:100',
-            'producto_peresedero' => 'required|boolean',
-            'estado' => 'required|boolean',
-            'fecha_vencimiento' => 'required|date',
-            'imagen' => 'nullable|string',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-            'categoria_id' => 'required|exists:categorias_elementos,id_categoria_elemento',
-            'tipo_material_id' => 'required|exists:tipo_materiales,id_tipo_material',
-        ]);
-
-        // Crear el nuevo material
-        $material = Material::create($request->all());
-        return response()->json($material, 201);
+        try {
+            // Los datos ya están validados por el FormRequest
+            $material = Material::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Material creado exitosamente',
+                'data' => $material
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el material',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -80,33 +78,29 @@ class MaterialController extends Controller
     /**
      * Actualizar un material existente
      * 
-     * @param Request $request Datos actualizados del material
+     * @param MaterialRequest $request Datos validados del material a actualizar
      * @param int $id ID del material a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el material actualizado
      */
-    public function update(Request $request, $id)
+    public function update(MaterialRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'codigo_sena' => 'sometimes|string|max:100',
-            'nombre_material' => 'sometimes|string|max:255',
-            'descripcion_material' => 'sometimes|string',
-            'unidad_medida' => 'sometimes|string|max:100',
-            'producto_peresedero' => 'sometimes|boolean',
-            'estado' => 'sometimes|boolean',
-            'fecha_vencimiento' => 'sometimes|date',
-            'imagen' => 'nullable|string',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-            'categoria_id' => 'sometimes|exists:categorias_elementos,id_categoria_elemento',
-            'tipo_material_id' => 'sometimes|exists:tipo_materiales,id_tipo_material',
-        ]);
-
-        // Buscar y actualizar el material
-        $material = Material::findOrFail($id);
-        $material->update($request->all());
-        return response()->json($material);
+        try {
+            $material = Material::findOrFail($id);
+            $material->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Material actualizado exitosamente',
+                'data' => $material
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el material',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

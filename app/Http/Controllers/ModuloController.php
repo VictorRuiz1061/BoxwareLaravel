@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Modulo;
+use App\Http\Requests\ModuloRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,28 +38,27 @@ class ModuloController extends Controller
     /**
      * Crear un nuevo módulo
      * 
-     * @param Request $request Datos del módulo a crear
+     * @param ModuloRequest $request Datos validados del módulo a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el módulo creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(ModuloRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'rutas' => 'required|string|max:255',
-            'descripcion_ruta' => 'required|string|max:255',
-            'mensaje_cambio' => 'required|string|max:255',
-            'imagen' => 'required|string|max:255',
-            'estado' => 'required|boolean',
-            'es_submenu' => 'required|boolean',
-            'modulo_padre_id' => 'nullable|exists:modulos,id_modulo',
-            'fecha_creacion' => 'nullable|date',
-            'fecha_accion' => 'nullable|date',
-        ]);
-
-        // Crear el nuevo módulo
-        $modulo = Modulo::create($request->all());
-        return response()->json($modulo, 201);
+        try {
+            $modulo = Modulo::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Módulo creado exitosamente',
+                'data' => $modulo
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el módulo',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -77,30 +77,29 @@ class ModuloController extends Controller
     /**
      * Actualizar un módulo existente
      * 
-     * @param Request $request Datos actualizados del módulo
+     * @param ModuloRequest $request Datos validados del módulo a actualizar
      * @param int $id ID del módulo a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el módulo actualizado
      */
-    public function update(Request $request, $id)
+    public function update(ModuloRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'rutas' => 'sometimes|string|max:255',
-            'descripcion_ruta' => 'sometimes|string|max:255',
-            'mensaje_cambio' => 'sometimes|string|max:255',
-            'imagen' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|boolean',
-            'es_submenu' => 'sometimes|boolean',
-            'modulo_padre_id' => 'nullable|exists:modulos,id_modulo',
-            'fecha_creacion' => 'nullable|date',
-            'fecha_accion' => 'nullable|date',
-        ]);
-
-        // Buscar y actualizar el módulo
-        $modulo = Modulo::findOrFail($id);
-        $modulo->update($request->all());
-        return response()->json($modulo);
+        try {
+            $modulo = Modulo::findOrFail($id);
+            $modulo->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Módulo actualizado exitosamente',
+                'data' => $modulo
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el módulo',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

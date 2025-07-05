@@ -34,8 +34,8 @@ class DatabaseSeeder extends Seeder
             Usuario::updateOrCreate(
                 ['email' => 'admin@sena.edu.co'],
                 [
-                    'nombre_usuario' => 'Administrador',
-                    'apellido_usuario' => 'Sistema',
+                    'nombre' => 'Administrador',
+                    'apellido' => 'Sistema',
                     'email' => 'admin@sena.edu.co',
                     'password' => Hash::make('admin123'),
                     'estado' => true,
@@ -52,8 +52,8 @@ class DatabaseSeeder extends Seeder
             Usuario::updateOrCreate(
                 ['email' => 'usuario@sena.edu.co'],
                 [
-                    'nombre_usuario' => 'Usuario',
-                    'apellido_usuario' => 'Prueba',
+                    'nombre' => 'Usuario',
+                    'apellido' => 'Prueba',
                     'email' => 'usuario@sena.edu.co',
                     'password' => Hash::make('usuario123'),
                     'estado' => true,

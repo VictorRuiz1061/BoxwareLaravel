@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\TipoMaterial;
+use App\Http\Requests\TipoMaterialRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,23 +38,27 @@ class TipoMaterialController extends Controller
     /**
      * Crear un nuevo tipo de material
      * 
-     * @param Request $request Datos del tipo de material a crear
+     * @param TipoMaterialRequest $request Datos validados del tipo de material a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el tipo de material creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(TipoMaterialRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre_tipo_material' => 'required|string|max:255',
-            'estado' => 'required|boolean',
-            'fecha_creacion' => 'required|date',
-            'fecha_modificacion' => 'required|date',
-        ]);
-
-        // Crear el nuevo tipo de material
-        $tipoMaterial = TipoMaterial::create($request->all());
-        return response()->json($tipoMaterial, 201);
+        try {
+            $tipoMaterial = TipoMaterial::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Tipo de material creado exitosamente',
+                'data' => $tipoMaterial
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el tipo de material',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -72,25 +77,29 @@ class TipoMaterialController extends Controller
     /**
      * Actualizar un tipo de material existente
      * 
-     * @param Request $request Datos actualizados del tipo de material
+     * @param TipoMaterialRequest $request Datos validados del tipo de material a actualizar
      * @param int $id ID del tipo de material a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el tipo de material actualizado
      */
-    public function update(Request $request, $id)
+    public function update(TipoMaterialRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'nombre_tipo_material' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|boolean',
-            'fecha_creacion' => 'sometimes|date',
-            'fecha_modificacion' => 'sometimes|date',
-        ]);
-
-        // Buscar y actualizar el tipo de material
-        $tipoMaterial = TipoMaterial::findOrFail($id);
-        $tipoMaterial->update($request->all());
-        return response()->json($tipoMaterial);
+        try {
+            $tipoMaterial = TipoMaterial::findOrFail($id);
+            $tipoMaterial->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Tipo de material actualizado exitosamente',
+                'data' => $tipoMaterial
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el tipo de material',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

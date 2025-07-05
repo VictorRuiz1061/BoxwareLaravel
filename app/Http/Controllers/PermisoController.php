@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Permiso;
+use App\Http\Requests\PermisoRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,28 +38,27 @@ class PermisoController extends Controller
     /**
      * Crear un nuevo permiso
      * 
-     * @param Request $request Datos del permiso a crear
+     * @param PermisoRequest $request Datos validados del permiso a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el permiso creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(PermisoRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'estado' => 'required|boolean',
-            'puede_ver' => 'required|boolean',
-            'puede_crear' => 'required|boolean',
-            'puede_editar' => 'required|boolean',
-            'puede_eliminar' => 'required|boolean',
-            'modulo_id' => 'required|exists:modulos,id_modulo',
-            'rol_id' => 'required|exists:roles,id_rol',
-            'fecha_creacion' => 'required|date',
-        ]);
-
-        // Crear el nuevo permiso
-        $permiso = Permiso::create($request->all());
-        return response()->json($permiso, 201);
+        try {
+            $permiso = Permiso::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Permiso creado exitosamente',
+                'data' => $permiso
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el permiso',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -77,30 +77,29 @@ class PermisoController extends Controller
     /**
      * Actualizar un permiso existente
      * 
-     * @param Request $request Datos actualizados del permiso
+     * @param PermisoRequest $request Datos validados del permiso a actualizar
      * @param int $id ID del permiso a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el permiso actualizado
      */
-    public function update(Request $request, $id)
+    public function update(PermisoRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'nombre' => 'sometimes|string|max:255',
-            'estado' => 'sometimes|boolean',
-            'puede_ver' => 'sometimes|boolean',
-            'puede_crear' => 'sometimes|boolean',
-            'puede_editar' => 'sometimes|boolean',
-            'puede_eliminar' => 'sometimes|boolean',
-            'modulo_id' => 'sometimes|exists:modulos,id_modulo',
-            'rol_id' => 'sometimes|exists:roles,id_rol',
-            'fecha_creacion' => 'sometimes|date',
-        ]);
-
-        // Buscar y actualizar el permiso
-        $permiso = Permiso::findOrFail($id);
-        $permiso->update($request->all());
-        return response()->json($permiso);
+        try {
+            $permiso = Permiso::findOrFail($id);
+            $permiso->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Permiso actualizado exitosamente',
+                'data' => $permiso
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el permiso',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

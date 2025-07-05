@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Inventario;
+use App\Http\Requests\InventarioRequest;
 use Illuminate\Http\Request;
 
 /**
@@ -37,23 +38,27 @@ class InventarioController extends Controller
     /**
      * Crear un nuevo registro de inventario
      * 
-     * @param Request $request Datos del inventario a crear
+     * @param InventarioRequest $request Datos validados del inventario a crear
      * @return \Illuminate\Http\JsonResponse
      * Retorna el registro de inventario creado con código de estado 201
      */
-    public function store(Request $request)
+    public function store(InventarioRequest $request)
     {
-        // Validar los datos de entrada
-        $request->validate([
-            'stock' => 'required|integer',
-            'placa_sena' => 'required|string',
-            'descripcion' => 'required|string',
-            'sitio_id' => 'required|exists:sitios,id_sitio',
-        ]);
-
-        // Crear el nuevo registro de inventario
-        $inventario = Inventario::create($request->all());
-        return response()->json($inventario, 201);
+        try {
+            $inventario = Inventario::create($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro de inventario creado exitosamente',
+                'data' => $inventario
+            ], 201);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al crear el registro de inventario',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -72,25 +77,29 @@ class InventarioController extends Controller
     /**
      * Actualizar un registro de inventario existente
      * 
-     * @param Request $request Datos actualizados del inventario
+     * @param InventarioRequest $request Datos validados del inventario a actualizar
      * @param int $id ID del inventario a actualizar
      * @return \Illuminate\Http\JsonResponse
      * Retorna el registro de inventario actualizado
      */
-    public function update(Request $request, $id)
+    public function update(InventarioRequest $request, $id)
     {
-        // Validar los datos de entrada (campos opcionales para actualización)
-        $request->validate([
-            'stock' => 'sometimes|integer',
-            'placa_sena' => 'sometimes|string',
-            'descripcion' => 'sometimes|string',
-            'sitio_id' => 'sometimes|exists:sitios,id_sitio',
-        ]);
-
-        // Buscar y actualizar el registro de inventario
-        $inventario = Inventario::findOrFail($id);
-        $inventario->update($request->all());
-        return response()->json($inventario);
+        try {
+            $inventario = Inventario::findOrFail($id);
+            $inventario->update($request->validated());
+            
+            return response()->json([
+                'success' => true,
+                'message' => 'Registro de inventario actualizado exitosamente',
+                'data' => $inventario
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al actualizar el registro de inventario',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**

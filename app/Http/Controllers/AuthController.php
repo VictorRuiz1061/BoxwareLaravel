@@ -43,7 +43,7 @@ class AuthController extends Controller
      * 
      * @param Request $request Datos del formulario de login
      * @return \Illuminate\Http\JsonResponse
-     * Retorna respuesta JSON con el resultado del login
+     * Retorna respuesta JSON con el resultado del login y token de acceso
      */
     public function login(Request $request)
     {
@@ -60,16 +60,18 @@ class AuthController extends Controller
                 // Login exitoso
                 $user = Auth::user();
                 
-                // Prueba sin la relación rol
+                // Generar token de acceso usando Sanctum
+                $token = $user->createToken('api-token')->plainTextToken;
+                
                 return response()->json([
                     'success' => true,
                     'message' => 'Login exitoso',
+                    'token' => $token,
+                    'token_type' => 'Bearer',
                     'user' => [
                         'id' => $user->id_usuario,
-                        'nombre' => $user->nombre_usuario,
-                        'apellido' => $user->apellido_usuario,
                         'email' => $user->email,
-                        // 'rol' => $user->rol ? $user->rol->nombre_rol : null // Comenta esta línea
+                        'rol' => $user->rol,
                     ]
                 ]);
             }
@@ -100,20 +102,29 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         try {
-            // Validar los datos de entrada
+            // Validar los datos de entrada con mensajes personalizados
             $request->validate([
-                'nombre_usuario' => 'required|string|max:255',
-                'apellido_usuario' => 'required|string|max:255',
+                'nombre' => 'required|string|max:255',
+                'apellido' => 'required|string|max:255',
                 'email' => 'required|email|unique:usuarios,email',
                 'password' => 'required|string|min:6|confirmed',
                 'estado' => 'boolean',
                 'rol_id' => 'exists:roles,id_rol',
+            ], [
+                'nombre.required' => 'El campo nombre es obligatorio.',
+                'apellido.required' => 'El campo apellido es obligatorio.',
+                'email.required' => 'El campo email es obligatorio.',
+                'email.email' => 'El email debe ser una dirección válida.',
+                'email.unique' => 'Este email ya está registrado.',
+                'password.required' => 'El campo contraseña es obligatorio.',
+                'password.min' => 'La contraseña debe tener al menos 6 caracteres.',
+                'password.confirmed' => 'Las contraseñas no coinciden.',
             ]);
 
             // Crear el nuevo usuario con contraseña hasheada
             $usuario = Usuario::create([
-                'nombre_usuario' => $request->nombre_usuario,
-                'apellido_usuario' => $request->apellido_usuario,
+                'nombre' => $request->nombre,
+                'apellido' => $request->apellido,
                 'email' => $request->email,
                 'password' => Hash::make($request->password),
                 'estado' => $request->estado ?? true,
@@ -150,7 +161,15 @@ class AuthController extends Controller
      */
     public function logout(Request $request)
     {
-        // Cerrar sesión y invalidar tokens
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        
+        // Revocar el token actual del usuario si existe
+        if ($user && $user->currentAccessToken()) {
+            $user->currentAccessToken()->delete();
+        }
+        
+        // Cerrar sesión y invalidar tokens de sesión
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -170,5 +189,26 @@ class AuthController extends Controller
     public function user()
     {
         return response()->json(Auth::user());
+    }
+
+    /**
+     * Revocar todos los tokens del usuario
+     * 
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * Retorna respuesta JSON confirmando la revocación de tokens
+     */
+    public function revokeAllTokens(Request $request)
+    {
+        // Obtener el usuario autenticado
+        $user = Auth::user();
+        
+        // Revocar todos los tokens del usuario
+        $user->tokens()->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Todos los tokens han sido revocados exitosamente'
+        ]);
     }
 }

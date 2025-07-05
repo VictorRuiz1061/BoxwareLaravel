@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id('id_area');
             $table->string('nombre_area', 255);
             $table->boolean('estado');
+            $table->foreignId('sede_id')->constrained('sedes', 'id_sede');
             $table->timestamp('fecha_creacion');
             $table->timestamp('fecha_modificacion');
-            $table->foreignId('sede_id')->constrained('sedes', 'id_sede');
         });
     }
 
